@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Trisue</a>
+        <div class="collapse navbar-collapse justify-content-end" id="myNav">
+          <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <form class="form-inline my-2 my-lg-0">
+                <a class="btn btn-secondary btn-sm" href="settings.html">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                </a>
+                <a class="btn btn-secondary btn-sm" href="/">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                </a>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Url</th>
+            <th>Date</th>
+            <th>Tool</th>
+          </tr>
+        </thead>
+        <tbody id="tbRecords"></tbody>
+      </table>
+    </div>
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/tether/1.4.0/js/tether.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="storage.js"></script>
+    <script src="list.js"></script>
+  </body>
+</html>

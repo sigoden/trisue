@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#myNav" aria-controls="myNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Trisue</a>
+        <div class="collapse navbar-collapse justify-content-end" id="myNav">
+          <ul class="nav navbar-nav">
+            <li class="nav-item">
+              <form class="form-inline my-2 my-lg-0">
+                <a class="btn btn-secondary btn-sm" href="settings.html">
+                  <i class="fa fa-cog" aria-hidden="true"></i>
+                </a>
+                <a class="btn btn-secondary btn-sm" href="list.html">
+                  <i class="fa fa-list" aria-hidden="true"></i>
+                </a>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="container mt-5">
+        <div class="form-group row">
+          <label class="col-2 col-form-label">路径</label>
+          <div class="col-10">
+            <div class="input-group">
+              <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="myMethod">
+                <option selected value="GET">GET</option>
+                <option value="PUT">PUT</option>
+                <option value="POST">POST</option>
+                <option value="DELETE">DELETE</option>
+              </select>
+              <input type="text" class="form-control" aria-label="url" placeholder="protocol://host/path?query" id="myPath">
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">描述</label>
+          <div class="col-10">
+            <textarea class="form-control" id="myDescribe" placeholder="测试目的，描述异常"></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">请求头</label>
+          <div class="col-10">
+            <textarea class="form-control" id="myHeader" placeholder="Content-Type: application&#10;Authorization: Bearer abearerauthstring"></textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2 col-form-label">请求数据</label>
+          <div class="col-10">
+            <textarea class="form-control" id="myReqBody" placeholder="{&#10;  &quot;key&quot;: &quot;value&quot;&#10;}"></textarea>
+            <small class="form-text text-muted">x-www-form-urlencoded形式的数据也写成JSON形式</small>
+          </div>
+        </div>
+        <div id="grpTry">
+          <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+              <button type="submit" class="btn btn-primary" id="btnTry">发送请求</button>
+              <button type="submit" class="btn btn-primary" id="btnGenUrl">更新地址栏</button>
+            </div>
+          </div>
+        </div>
+        <div id="grpRetry" style="display: none">
+          <div class="form-group row">
+            <label class="col-2 col-form-label">响应数据</label>
+            <div class="col-10">
+              <textarea class="form-control" id="myResBody"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="offset-sm-2 col-sm-10">
+              <button type="submit" class="btn btn-primary" id="btnRetry">发送请求</button>
+              <button type="submit" class="btn btn-primary" id="btnClearRes">清除响应</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/tether/1.4.0/js/tether.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/purl/2.3.1/purl.min.js"></script>
+    <script src="//cdn.bootcss.com/autosize.js/4.0.0/autosize.min.js"></script>
+    <script src="storage.js"></script>
+    <script src="index.js"></script>
+  </body>
+</html>
