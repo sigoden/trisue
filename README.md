@@ -14,3 +14,9 @@ trisue是一款REST API调试及异常报告工具。
 - 通过URL分享和重新请求
 - 变量替换
 - JSON自动格式化
+
+## FAQ
+
+1. 跨域报错怎么办?
+
+ 需要安装Chrome插件[扩展程序Allow-Control-Allow-Origin: *](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=zh-CN)以处理跨域问题
