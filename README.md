@@ -18,5 +18,7 @@ trisue是一款REST API调试及异常报告工具。
 ## FAQ
 
 1. 跨域报错怎么办?
-
    需要安装Chrome插件[扩展程序Allow-Control-Allow-Origin: *](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=zh-CN)以处理跨域问题
+
+2. http与https?
+   trisue.sigoden.com同时支持[http](http://trisue.sigoden.com)和[https](http://trisue.sigoden.com),根据您要测试的接口协议选择站点
