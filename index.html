@@ -32,10 +32,10 @@
 
       <div class="container mt-5">
         <div class="form-group row">
-          <label class="col-2 col-form-label">路径</label>
-          <div class="col-10">
+          <label class="col-md-2 col-form-label">路径</label>
+          <div class="col-md-10">
             <div class="input-group">
-              <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="myMethod">
+              <select class="custom-select" id="myMethod">
                 <option selected value="GET">GET</option>
                 <option value="PUT">PUT</option>
                 <option value="POST">POST</option>
@@ -46,20 +46,20 @@
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">描述</label>
-          <div class="col-10">
+          <label class="col-md-2 col-form-label">描述</label>
+          <div class="col-md-10">
             <textarea class="form-control" id="myDescribe" placeholder="测试目的，描述异常"></textarea>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">请求头</label>
-          <div class="col-10">
+          <label class="col-md-2 col-form-label">请求头</label>
+          <div class="col-md-10">
             <textarea class="form-control" id="myHeader" placeholder="Content-Type: application&#10;Authorization: Bearer abearerauthstring"></textarea>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-2 col-form-label">请求数据</label>
-          <div class="col-10">
+          <label class="col-md-2 col-form-label">请求数据</label>
+          <div class="col-md-10">
             <textarea class="form-control" id="myReqBody" placeholder="{&#10;  &quot;key&quot;: &quot;value&quot;&#10;}"></textarea>
             <small class="form-text text-muted">x-www-form-urlencoded形式的数据也写成JSON形式</small>
           </div>
@@ -74,8 +74,8 @@
         </div>
         <div id="grpRetry" style="display: none">
           <div class="form-group row">
-            <label class="col-2 col-form-label">响应数据</label>
-            <div class="col-10">
+            <label class="col-md-2 col-form-label">响应数据</label>
+            <div class="col-md-10">
               <textarea class="form-control" id="myResBody"></textarea>
             </div>
           </div>

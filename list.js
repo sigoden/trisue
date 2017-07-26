@@ -1,6 +1,5 @@
 const VALID_PARAM_KEYS = ['method', 'path', 'describe', 'header', 'reqBody', 'resBody']
 
-let $tbRecords
 
 function formatTime (time) {
   let d = new Date(time)
@@ -21,10 +20,9 @@ function filterParams(params) {
 }
 
 function drawRow(rowData) {
-  let row = $(`
-          <tr data-id="${rowData.id}">
+  return `<tr data-id="${rowData.id}">
             <td><code>${rowData.method}</code>${rowData.path}</td>
-            <td>${formatTime(rowData.id)}</td>
+            <td class="hidden-xs-down">${formatTime(rowData.id)}</td>
             <td>
               <div class="btn-group" role="group">
                 <a type="button" class="btn btn-sm btn-secondary" target="_blank" href="${genUrl(rowData)}">
@@ -35,9 +33,7 @@ function drawRow(rowData) {
                 </button>
               </div>
             </td>
-          </tr>
-  `)
-  $tbRecords.append(row)
+          </tr>`
 }
 
 function onRemove($btn) {
@@ -48,8 +44,7 @@ function onRemove($btn) {
 
 $(function () {
   let records = MyStorage.records
-  $tbRecords = $('#tbRecords')
-  records.forEach(rowData => drawRow(rowData))
+  $(records.map(rowData => drawRow(rowData)).join('\n')).appendTo('#tbRecords')
   $('#btnRemove').on('click', function() {
     onRemove($(this))
   })
