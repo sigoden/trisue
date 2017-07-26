@@ -131,7 +131,7 @@ function reqBodyProc(contentType, data) {
 }
 
 function onRequest(value) {
-  $myResBody.val(value)
+  autosize.update($myResBody.val(value))
   $grpTry.hide()
   $grpRetry.show()
   let params = collectParams()
