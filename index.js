@@ -26,7 +26,7 @@ function compactJSON(str) {
 }
 
 function patternReplace(str, prefix, suffix) {
-  let patterns = CONFIG.patterns
+  let patterns = CONFIG.patterns || {}
   for (let key in patterns) {
     str = str.replace(new RegExp(prefix + key + suffix, 'g'), patterns[key])
   }

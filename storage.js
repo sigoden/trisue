@@ -27,7 +27,7 @@ var MyStorage = (function () {
 
   class MyStorage {
     static get config() {
-      return getObject(CONFIG_KEY)
+      return getObject(CONFIG_KEY, {})
     }
 
     static set config(obj) {

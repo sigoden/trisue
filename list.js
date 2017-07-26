@@ -21,7 +21,7 @@ function filterParams(params) {
 
 function drawRow(rowData) {
   return `<tr data-id="${rowData.id}">
-            <td><code>${rowData.method}</code>${rowData.path}</td>
+            <td><code>${rowData.method}</code><span>${rowData.path}</span></td>
             <td class="hidden-xs-down">${formatTime(rowData.id)}</td>
             <td>
               <div class="btn-group" role="group">
@@ -45,7 +45,7 @@ function onRemove($btn) {
 $(function () {
   let records = MyStorage.records
   $(records.map(rowData => drawRow(rowData)).join('\n')).appendTo('#tbRecords')
-  $('#btnRemove').on('click', function() {
+  $('#tbRecords').on('click', '#btnRemove', function() {
     onRemove($(this))
   })
 })
