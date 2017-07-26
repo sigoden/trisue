@@ -51,12 +51,11 @@ function populateForm() {
   const urlParams = $.url().data.param.query
   for (let key in urlParams) {
     if (VALID_PARAM_KEYS.indexOf(key) >  -1 && urlParams[key]) {
-      if (key === 'header') {
-        $(`#${ID_PREFIX}${capitalize(key)}`).val(prettyJSON(urlParams[key] || CONFIG.defaultHeader))
-      } else {
-        $(`#${ID_PREFIX}${capitalize(key)}`).val(prettyJSON(urlParams[key]))
-      }
+      $(`#${ID_PREFIX}${capitalize(key)}`).val(prettyJSON(urlParams[key]))
     }
+  }
+  if (!urlParams['header']) {
+    $(`#${ID_PREFIX}Header`).val(CONFIG.defaultHeader)
   }
   if (urlParams['resBody']) {
     $grpTry.hide()
