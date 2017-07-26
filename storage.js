@@ -21,7 +21,7 @@ var MyStorage = (function () {
 
   function maxRecordsRestrict (config, records) {
     let max = parseInt(config.maxRecords) || -1 
-    if (max < -1) return records
+    if (max < 0) return records
     return records.slice(0, max)
   }
 
