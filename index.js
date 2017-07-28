@@ -86,6 +86,7 @@ function request() {
     url: params.path,
     headers,
     data,
+    method: params.method,
     timeout: CONFIG.reqTimeout || 0,
     success: function (data) {
       onRequest(JSON.stringify(data, null, 4))

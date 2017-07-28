@@ -24,3 +24,7 @@ trisue是一款REST API调试及异常报告工具。
 2. http与https?
 
    trisue.sigoden.com同时支持[http](http://trisue.sigoden.com)和[https](http://trisue.sigoden.com),根据您要测试的接口协议选择站点
+
+3. 地址太长被浏览器阻止怎么办?
+
+   可以清除返回数据后重新生成链接
