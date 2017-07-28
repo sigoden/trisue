@@ -118,9 +118,7 @@ function reqBodyProc(contentType, data) {
   data = patternReplace(data, '{{', '}}')
   let result = data
   if (contentType === 'application/json') {
-    try {
-      result = JSON.parse(data)
-    } catch(e) { }
+
   } else if (contentType === 'application/x-www-form-urlencoded') {
     try {
       parsed = JSON.parse(data)
