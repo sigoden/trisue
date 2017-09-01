@@ -1,6 +1,7 @@
 const ID_PREFIX = 'my'
 const VALID_PARAM_KEYS = ['method', 'path', 'describe', 'header', 'reqBody', 'resBody']
 const CONFIG = MyStorage.config
+const MAX_URL_LENGTH = 15476
 
 let $myResBody, $grpTry, $grpRetry
 let isVirginURL = true
@@ -38,7 +39,7 @@ $(function(){
   reuseElement()
   populateForm()
   bindEvents()
-  autosize($('textarea'))
+  $('textarea').textareaAutoSize()
 })
 
 function reuseElement() {
@@ -129,7 +130,10 @@ function reqBodyProc(contentType, data) {
 }
 
 function onRequest(value) {
-  autosize.update($myResBody.val(value))
+  $myResBody.val(value)
+  setTimeout(function () {
+    $myResBody.trigger('input')
+  }, 0)
   $grpTry.hide()
   $grpRetry.show()
   let params = collectParams()
@@ -150,7 +154,11 @@ function onClearRes() {
 
 function changeUrlBar(params) {
   let url = genUrl(params)
-  url = patternReplace(url, '%7B%7B', '%7D%7D')
+  if (url.length > MAX_URL_LENGTH) {
+    let _params = Object.assign({}, params)
+    delete _params.resBody
+    url = genUrl(_params)
+  }
   if (isVirginURL) {
     history.pushState({}, '', url)
   } else {
@@ -161,5 +169,6 @@ function changeUrlBar(params) {
 
 function genUrl(params) {
   let attr = $.url().data.attr
-  return attr.base + attr.path + '?' + $.param(params)
+  let url = attr.base + attr.path + '?' + $.param(params)
+  return patternReplace(url, '%7B%7B', '%7D%7D')
 }
