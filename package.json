@@ -1,0 +1,34 @@
+{
+  "name": "trisue",
+  "version": "1.0.0",
+  "description": "trisue是一款REST API调试及异常报告工具。",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sigoden/trisue.git"
+  },
+  "keywords": [],
+  "author": "Sigoden Huang <sigoden@gmail.com> (https://sigoden.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sigoden/trisue/issues"
+  },
+  "homepage": "https://github.com/sigoden/trisue#readme",
+  "dependencies": {
+    "@material-ui/core": "^3.2.1",
+    "@material-ui/icons": "^3.0.1",
+    "express": "^4.16.4",
+    "next": "^7.0.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "request": "^2.88.0",
+    "shortid": "^2.2.13",
+    "sqlite3": "^4.0.2"
+  },
+  "devDependencies": {}
+}
