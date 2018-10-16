@@ -1,6 +1,6 @@
 {
   "name": "trisue",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "trisue是一款REST API调试及异常报告工具。",
   "main": "index.js",
   "scripts": {

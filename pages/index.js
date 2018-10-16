@@ -183,9 +183,9 @@ class Index extends React.Component {
     })
       .then(res => {
         res.json().then(data => {
-          const resBody = data.body;
           const resStatus = res.status;
-          const resHeaders = Object.keys(res.headers).reduce((r, c) => {
+          const resBody = data.body;
+          const resHeaders = Object.keys(data.headers || {}).reduce((r, c) => {
             r += `${c}: ${data.headers[c]}\n`;
             return r;
           }, "");
