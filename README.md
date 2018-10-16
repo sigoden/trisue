@@ -1,30 +1,7 @@
-# Trisue
+# Trisue 
 
-trisue是一款REST API调试及异常报告工具。
+> Trisue 是一款REST API调试及异常报告工具。
 
 ## 概述
 
-前端会向后端开发人员报告一些接口错误。接口包含请求路径，方法，HTTP头，请求数据，返回数据等内容，要将这一堆东西完整的发送给相关人员并不容易。后端收到这些数据之后，也需要通过postman，curl等构造请求，这个过程也很麻烦。trisue就是为了解决简化这个过程而开发的。你可以在trisue中构造整个请求并测试，trisue会将请求相关的所有数据拼接到浏览器地址栏中。复制地址栏中的数据后发送给后端，后端打开该地址，将会再现整个请求过程。
-
-## 特征
-
-- 发送HTTP请求,包括GET, POST, DELETE, PUT
-- 本地保存请求历史
-- 浏览编辑请求历史
-- 通过URL分享和重新请求
-- 变量替换
-- JSON自动格式化
-
-## FAQ
-
-1. 跨域报错怎么办?
-
-   需要安装Chrome插件[扩展程序Allow-Control-Allow-Origin: *](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=zh-CN)以处理跨域问题
-
-2. http与https?
-
-   trisue.sigoden.com同时支持[http](http://trisue.sigoden.com)和[https](http://trisue.sigoden.com),根据您要测试的接口协议选择站点
-
-3. 地址太长被浏览器阻止怎么办?
-
-   可以清除返回数据后重新生成链接
+前端会向后端开发人员报告一些接口错误。接口包含请求路径，方法，HTTP头，请求数据，返回数据等内容，要将这一堆东西完整的发送给相关人员并不容易。后端收到这些数据之后，也需要通过 Postman，Curl 等构造请求，这个过程也很麻烦。Trisue 就是为了解决简化这个过程而开发的。你可以通过 Trisue 构造请求并测试，填写问题报告， 再生成共享链接。将该链接发送给后端，后端打开该地址，后端能直观看到相关数据。
