@@ -56,6 +56,15 @@ const styles = {
   cardContent: {
     paddingTop: "0"
   },
+  cardResStatus: {
+    marginTop: "12px",
+    paddingBottom: "12px"
+  },
+  textResStatus: {
+    marginRight: "10px",
+    marginTop: "10px",
+    fontSize: "1.4rem"
+  },
   buttonBar: {
     marginLeft: "-8px",
     marginTop: "24px"
@@ -70,31 +79,6 @@ const styles = {
   }
 };
 
-const cardsConfig = [
-  {
-    title: "请求头",
-    key: "headers",
-    helperText: "格式 <key>: <value>"
-  },
-  {
-    title: "请求体",
-    key: "body"
-  },
-  {
-    title: "响应头",
-    key: "resHeaders"
-  },
-  {
-    title: "响应体",
-    key: "resBody"
-  },
-  {
-    title: "备注",
-    key: "note",
-    helperText: "用来报告更细致的信息，如执行上下文、问题来源推测"
-  }
-];
-
 class Index extends React.Component {
   state = {
     fetching: false,
@@ -106,6 +90,7 @@ class Index extends React.Component {
       body: `{"key": "value"}`,
       resHeaders: "",
       resBody: "",
+      resStatus: 0,
       note: ""
     },
     shareId: "",
@@ -191,6 +176,7 @@ class Index extends React.Component {
       .then(res => {
         res.json().then(data => {
           const resBody = data.body;
+          const resStatus = res.status;
           const resHeaders = Object.keys(data.headers).reduce((r, c) => {
             r += `${c}: ${data.headers[c]}\n`;
             return r;
@@ -203,7 +189,8 @@ class Index extends React.Component {
             form: {
               ...this.state.form,
               resHeaders,
-              resBody
+              resBody,
+              resStatus
             },
             collapse: {
               ...this.state.collapse,
@@ -301,44 +288,28 @@ class Index extends React.Component {
                   />
                 </FormControl>
               </Grid>
-              {cardsConfig.map(item => {
-                const isCollapsed = this.state.collapse[item.key];
-                return (
-                  <Card key={item.key} className={classes.card}>
-                    <CardHeader
-                      className={classes.cardHeader}
-                      action={
-                        <IconButton
-                          onClick={() => this.handleCollapseChange(item.key)}
-                        >
-                          {isCollapsed ? (
-                            <ExpandMoreIcon />
-                          ) : (
-                            <ExpandLessIcon />
-                          )}
-                        </IconButton>
-                      }
-                      title={
-                        <div style={{ fontSize: "1.4rem" }}>{item.title}</div>
-                      }
-                    />
-                    <Collapse in={!isCollapsed} timeout="auto">
-                      <CardContent className={classes.cardContent}>
-                        <FormControl fullWidth>
-                          <TextField
-                            onChange={this.handleFormFieldChange}
-                            name={item.key}
-                            value={this.state.form[item.key]}
-                            multiline
-                            helperText={item.helperText || ""}
-                            margin="normal"
-                            variant="outlined"
-                          />
-                        </FormControl>
-                      </CardContent>
-                    </Collapse>
-                  </Card>
-                );
+              {this.renderCardTextArea({
+                title: "请求头",
+                key: "headers",
+                helperText: "格式 <key>: <value>"
+              })}
+              {this.renderCardTextArea({
+                title: "请求体",
+                key: "body"
+              })}
+              {this.renderCardResStatus()}
+              {this.renderCardTextArea({
+                title: "响应头",
+                key: "resHeaders"
+              })}
+              {this.renderCardTextArea({
+                title: "响应体",
+                key: "resBody"
+              })}
+              {this.renderCardTextArea({
+                title: "备注",
+                key: "note",
+                helperText: "用来报告更细致的信息，如执行上下文、问题来源推测"
               })}
             </form>
           </Grid>
@@ -381,6 +352,55 @@ class Index extends React.Component {
           )}
         </div>
       </div>
+    );
+  }
+
+  renderCardResStatus() {
+    const { classes } = this.props;
+    return (
+      <Card key="resStatus" className={classes.cardResStatus}>
+        <CardHeader
+          className={classes.cardHeader}
+          action={
+            <div className={classes.textResStatus}>
+              {this.state.form.resStatus}
+            </div>
+          }
+          title={<div style={{ fontSize: "1.4rem" }}>响应码</div>}
+        />
+      </Card>
+    );
+  }
+  renderCardTextArea(item) {
+    const { classes } = this.props;
+    const isCollapsed = this.state.collapse[item.key];
+    return (
+      <Card key={item.key} className={classes.card}>
+        <CardHeader
+          className={classes.cardHeader}
+          action={
+            <IconButton onClick={() => this.handleCollapseChange(item.key)}>
+              {isCollapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+            </IconButton>
+          }
+          title={<div style={{ fontSize: "1.4rem" }}>{item.title}</div>}
+        />
+        <Collapse in={!isCollapsed} timeout="auto">
+          <CardContent className={classes.cardContent}>
+            <FormControl fullWidth>
+              <TextField
+                onChange={this.handleFormFieldChange}
+                name={item.key}
+                value={this.state.form[item.key]}
+                multiline
+                helperText={item.helperText || ""}
+                margin="normal"
+                variant="outlined"
+              />
+            </FormControl>
+          </CardContent>
+        </Collapse>
+      </Card>
     );
   }
 }
