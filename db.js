@@ -1,5 +1,6 @@
 const sqlite = require("sqlite3");
-const db = sqlite.Database(process.env.DB_FILE || "trisue.sql", err => {
+
+const db = new sqlite.Database(process.env.DB_FILE || "trisue.db", err => {
   if (err) throw err;
   db.run("CREATE TABLE IF NOT EXISTS share (id CHAR(6), data TEXT)");
 });
@@ -18,6 +19,6 @@ exports.getShareById = function(id, cb) {
     if (err) {
       return cb(err);
     }
-    cb(row);
+    cb(null, row);
   });
 };

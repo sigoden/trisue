@@ -1,25 +1,24 @@
-const { createServer } = require("http");
-const { parse } = require("url");
 const next = require("next");
-
-const backend = require("./backend");
-
+const app = require("./app");
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
+const db = require("./db");
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    // Be sure to pass `true` as the second argument to `url.parse`.
-    // This tells it to parse the query portion of the URL.
-    const parsedUrl = parse(req.url, true);
-    const { pathname, query } = parsedUrl;
-
-    if (pathname === "/api") {
-      backend(req, res);
+nextApp.prepare().then(() => {
+  app.get("/", (req, res) => {
+    if (req.query.shareId) {
+      db.getShareById(req.query.shareId, (err, share) => {
+        nextApp.render(req, res, "/", { shareData: share && share.data });
+      });
     } else {
-      app.render(req, res, pathname, query);
+      nextApp.render(req, res, "/", {});
     }
-  }).listen(3000, err => {
+  });
+  app.get("*", (req, res) => {
+    handle(req, res);
+  });
+  app.listen(3000, err => {
     if (err) throw err;
     console.log("> Ready on http://localhost:3000");
   });

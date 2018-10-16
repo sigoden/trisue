@@ -4,7 +4,7 @@
   "description": "trisue是一款REST API调试及异常报告工具。",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -20,10 +20,13 @@
   },
   "homepage": "https://github.com/sigoden/trisue#readme",
   "dependencies": {
-    "@material-ui/core": "^3.2.1",
+    "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
+    "content-type": "^1.0.4",
     "express": "^4.16.4",
     "next": "^7.0.2",
+    "query-string": "^6.2.0",
+    "raw-body": "^2.3.3",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-jss": "^8.6.1",
