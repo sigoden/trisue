@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import NoteIcon from "@material-ui/icons/Note";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import FormatIndentIncreaseIcon from "@material-ui/icons/FormatIndentIncrease";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -25,6 +26,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import parseCurl from "../lib/parseCurl";
+import xmlBeautify from "xml-beautifier";
 
 const styles = {
   root: {
@@ -69,6 +71,12 @@ const styles = {
   mainFormButton: {
     margin: "8px"
   },
+  formatButton: {
+    position: "absolute",
+    zIndex: "99",
+    right: 0,
+    top: "16px"
+  },
   errorAlert: {
     color: "#f44336",
     marginTop: "24px",
@@ -87,6 +95,7 @@ class Index extends React.Component {
       body: `{"key": "value"}`,
       resHeaders: "",
       resBody: "",
+      resBodyOrigin: "",
       resStatus: 0,
       note: ""
     },
@@ -176,7 +185,7 @@ class Index extends React.Component {
         res.json().then(data => {
           const resBody = data.body;
           const resStatus = res.status;
-          const resHeaders = Object.keys(data.headers).reduce((r, c) => {
+          const resHeaders = Object.keys(res.headers).reduce((r, c) => {
             r += `${c}: ${data.headers[c]}\n`;
             return r;
           }, "");
@@ -264,6 +273,38 @@ class Index extends React.Component {
 
   handleFetchError = err => {
     this.setState({ errorMsg: err.message, fetching: false });
+  };
+
+  handleResBodyFormatButtonClick = type => {
+    if (!type) return;
+    if (this.state.form.resBodyOrigin) {
+      this.setState({
+        form: {
+          ...this.state.form,
+          resBody: this.state.form.resBodyOrigin,
+          resBodyOrigin: ""
+        }
+      });
+      return;
+    }
+    let resBody;
+    const resBodyOrigin = this.state.form.resBody;
+    try {
+      if (type === "json") {
+        resBody = JSON.stringify(JSON.parse(resBodyOrigin), null, 2);
+      } else if (type === "xml") {
+        resBody = xmlBeautify(resBodyOrigin);
+      }
+    } catch (err) {
+      resBody = err.message;
+    }
+    this.setState({
+      form: {
+        ...this.state.form,
+        resBody,
+        resBodyOrigin
+      }
+    });
   };
 
   getBaseUrl = () => {
@@ -360,7 +401,7 @@ class Index extends React.Component {
               className={classes.mainFormButton}
               onClick={this.handleSendButtonClick}
             >
-              Send
+              Request
             </Button>
             <Button
               variant="contained"
@@ -460,6 +501,7 @@ class Index extends React.Component {
         <Collapse in={!isCollapsed} timeout="auto">
           <CardContent className={classes.formCardContent}>
             <FormControl fullWidth>
+              {item.key === "resBody" && this.renderResBodyFormatButton()}
               <TextField
                 onChange={this.handleFormFieldChange}
                 name={item.key}
@@ -475,6 +517,22 @@ class Index extends React.Component {
       </Card>
     );
   }
+
+  renderResBodyFormatButton() {
+    const { classes } = this.props;
+    const { resHeaders } = this.state.form;
+    if (!resHeaders) return;
+    const type = getContentType(resHeaders);
+    return (
+      <IconButton
+        className={classes.formatButton}
+        title="格式化开关"
+        onClick={() => this.handleResBodyFormatButtonClick(type)}
+      >
+        <FormatIndentIncreaseIcon />
+      </IconButton>
+    );
+  }
 }
 
 Index.propTypes = {
@@ -483,3 +541,24 @@ Index.propTypes = {
 };
 
 export default withStyles(styles)(Index);
+
+function getContentType(headersText) {
+  const contetTypeLine = headersText
+    .split("\n")
+    .find(line => /Content-Type/i.test(line));
+  if (!contetTypeLine) return false;
+  let contentType = contetTypeLine
+    .trim()
+    .slice(13)
+    .trim();
+  contentType = contentType.split(";")[0];
+  switch (contentType) {
+    case "application/json":
+      return "json";
+    case "application/xml":
+    case "text/xml":
+      return "xml";
+    default:
+      return false;
+  }
+}

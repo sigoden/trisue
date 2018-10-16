@@ -31,7 +31,8 @@
     "react-jss": "^8.6.1",
     "request": "^2.88.0",
     "shortid": "^2.2.13",
-    "sqlite3": "^4.0.2"
+    "sqlite3": "^4.0.2",
+    "xml-beautifier": "^0.4.0"
   },
   "devDependencies": {}
 }
