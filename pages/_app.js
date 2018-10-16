@@ -4,7 +4,7 @@ import App, { Container } from "next/app";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import JssProvider from "react-jss/lib/JssProvider";
-import getPageContext from "../frontend/getPageContext";
+import getPageContext from "../lib/getPageContext";
 
 class MyApp extends App {
   constructor(props) {

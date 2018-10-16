@@ -1,5 +1,4 @@
 import React from "react";
-import * as queryString from "query-string";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
@@ -25,54 +24,52 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import parseCurl from "../lib/parseCurl";
 
 const styles = {
   root: {
     maxWidth: "960px",
     margin: "0 auto"
   },
-  main: {
+  mainContent: {
     paddingLeft: "24px",
     paddingRight: "24px"
   },
-  toolbar: {
+  headerBar: {
     display: "flex"
   },
-  toolbarButtons: {
+  headerBarBtns: {
     marginLeft: "auto"
   },
-  formWrapper: {
-    margin: "auto"
-  },
-  form: {
+  mainForm: {
     width: "100%"
   },
-  card: {
+  formFieldCard: {
     marginTop: "12px"
   },
-  cardHeader: {
+  formCardHeader: {
     paddingBottom: "2px"
   },
-  cardContent: {
+  formCardContent: {
     paddingTop: "0"
   },
-  cardResStatus: {
+  resStatusCard: {
     marginTop: "12px",
     paddingBottom: "12px"
   },
-  textResStatus: {
+  resStatusText: {
     marginRight: "10px",
     marginTop: "10px",
     fontSize: "1.4rem"
   },
-  buttonBar: {
+  mainFormButtonBars: {
     marginLeft: "-8px",
     marginTop: "24px"
   },
-  button: {
+  mainFormButton: {
     margin: "8px"
   },
-  errorMsg: {
+  errorAlert: {
     color: "#f44336",
     marginTop: "24px",
     fontSize: "1.2rem"
@@ -94,7 +91,9 @@ class Index extends React.Component {
       note: ""
     },
     shareId: "",
+    curlText: "",
     showShareDialog: false,
+    showImportDialog: false,
     collapse: {
       reqHeaders: false,
       reqBody: false,
@@ -231,6 +230,38 @@ class Index extends React.Component {
       .catch(this.handleFetchError);
   };
 
+  hanleInputButtonClick = () => {
+    this.state({ showImportDialog: true });
+  };
+
+  handleImportButtonClick = () => {
+    const { curlText } = this.state;
+    if (!curlText) return;
+    const { uri, headers, body, method } = parseCurl(curlText);
+    this.setState({
+      form: {
+        ...this.state.form,
+        uri,
+        method,
+        headers: headers.join("\n"),
+        body,
+        resBody: "",
+        resHeaders: "",
+        resStatus: 0
+      },
+      showImportDialog: false
+    });
+  };
+
+  handleUrlFieldChange = event => {
+    this.setState({ curlText: event.target.value });
+  };
+
+  toggleImportDialog = () => {
+    const { showImportDialog } = this.state;
+    this.setState({ showImportDialog: !showImportDialog });
+  };
+
   handleFetchError = err => {
     this.setState({ errorMsg: err.message, fetching: false });
   };
@@ -249,20 +280,24 @@ class Index extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={classes.headerBar}>
           <Typography variant="h6" color="inherit">
             Trisue
           </Typography>
-          <div className={classes.toolbarButtons}>
-            <IconButton className={classes.iconButton} title="导入 CURL">
+          <div className={classes.headerBarBtns}>
+            <IconButton
+              className={classes.iconButton}
+              title="导入 CURL"
+              onClick={this.toggleImportDialog}
+            >
               <NoteIcon />
             </IconButton>
           </div>
         </Toolbar>
-        <div className="main" className={classes.main}>
+        <div className={classes.mainContent}>
           {this.state.fetching && <LineProgress />}
-          <Grid container className={classes.formWrapper}>
-            <form className={classes.form}>
+          <Grid container>
+            <form className={classes.mainForm}>
               <Grid container alignItems="center">
                 <FormControl style={{ width: "20%" }}>
                   <Select
@@ -277,6 +312,9 @@ class Index extends React.Component {
                     <MenuItem value="POST">POST</MenuItem>
                     <MenuItem value="PUT">PUT</MenuItem>
                     <MenuItem value="DELETE">DELETE</MenuItem>
+                    <MenuItem value="HEAD">HEAD</MenuItem>
+                    <MenuItem value="OPTIONS">OPTIONS</MenuItem>
+                    <MenuItem value="PATCH">PATCH</MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl style={{ width: "80%" }}>
@@ -314,55 +352,89 @@ class Index extends React.Component {
             </form>
           </Grid>
           {this.state.errorMsg && (
-            <div className={classes.errorMsg}>{this.state.errorMsg}</div>
+            <div className={classes.errorAlert}>{this.state.errorMsg}</div>
           )}
-          <div className={classes.buttonBar}>
+          <div className={classes.mainFormButtonBars}>
             <Button
               variant="contained"
-              className={classes.button}
+              className={classes.mainFormButton}
               onClick={this.handleSendButtonClick}
             >
               Send
             </Button>
             <Button
               variant="contained"
-              className={classes.button}
+              className={classes.mainFormButton}
               onClick={this.handleShareButtonClick}
             >
               Share
             </Button>
           </div>
-          {process.browser && (
-            <Dialog
-              open={this.state.showShareDialog}
-              onClose={this.handleShareDialogClose}
-            >
-              <DialogTitle>{"分享"}</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  {this.getBaseUrl() + "/?shareId=" + this.state.shareId}
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleShareDialogClose} color="primary">
-                  关闭
-                </Button>
-              </DialogActions>
-            </Dialog>
-          )}
+          {this.renderShareDialog()}
+          {this.renderImportDialog()}
         </div>
       </div>
     );
   }
 
+  renderShareDialog() {
+    if (!process.browser) return;
+    return (
+      <Dialog
+        open={this.state.showShareDialog}
+        onClose={this.handleShareDialogClose}
+      >
+        <DialogTitle>{"分享"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {this.getBaseUrl() + "/?shareId=" + this.state.shareId}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleShareDialogClose} color="primary">
+            关闭
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  renderImportDialog() {
+    return (
+      <Dialog
+        open={this.state.showImportDialog}
+        fullWidth
+        onClose={this.toggleImportDialog}
+      >
+        <DialogTitle>{"导入 CURL"}</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <TextField
+              onChange={this.handleUrlFieldChange}
+              value={this.state.curlText}
+              multiline
+              margin="normal"
+              variant="outlined"
+            />
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleImportButtonClick}>导入</Button>
+          <Button onClick={this.toggleImportDialog}>取消</Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
   renderCardResStatus() {
     const { classes } = this.props;
+    if (!this.state.form.resStatus) return;
     return (
-      <Card key="resStatus" className={classes.cardResStatus}>
+      <Card key="resStatus" className={classes.resStatusCard}>
         <CardHeader
-          className={classes.cardHeader}
+          className={classes.formCardHeader}
           action={
-            <div className={classes.textResStatus}>
+            <div className={classes.resStatusText}>
               {this.state.form.resStatus}
             </div>
           }
@@ -375,9 +447,9 @@ class Index extends React.Component {
     const { classes } = this.props;
     const isCollapsed = this.state.collapse[item.key];
     return (
-      <Card key={item.key} className={classes.card}>
+      <Card key={item.key} className={classes.formFieldCard}>
         <CardHeader
-          className={classes.cardHeader}
+          className={classes.formCardHeader}
           action={
             <IconButton onClick={() => this.handleCollapseChange(item.key)}>
               {isCollapsed ? <ExpandMoreIcon /> : <ExpandLessIcon />}
@@ -386,7 +458,7 @@ class Index extends React.Component {
           title={<div style={{ fontSize: "1.4rem" }}>{item.title}</div>}
         />
         <Collapse in={!isCollapsed} timeout="auto">
-          <CardContent className={classes.cardContent}>
+          <CardContent className={classes.formCardContent}>
             <FormControl fullWidth>
               <TextField
                 onChange={this.handleFormFieldChange}
