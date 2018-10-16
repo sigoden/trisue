@@ -58,8 +58,9 @@ app.post("/api/proxy", rawBodyMid, (req, res) => {
       res.status(500).json({ err: err.message });
       return;
     }
+    const status = resp.statusCode;
     const headers = resp.headers;
-    res.json({ headers, body });
+    res.json({ status, headers, body });
   });
 });
 
