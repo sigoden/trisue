@@ -166,10 +166,14 @@ class Index extends React.Component {
     }
 
     const headersObj = headers.split("\n").reduce((r, c) => {
-      const [k, v] = c.split(":");
+      const sepIndex = c.indexOf(":");
+      const k = c.slice(0, sepIndex);
+      const v = c.slice(sepIndex + 1);
       r[k.trim()] = (v || "").trim();
       return r;
     }, {});
+    console.log(headers);
+    console.log(headersObj);
 
     this.setState({ fetching: true });
     fetch(baseUrl + "/api/proxy", {
@@ -254,6 +258,7 @@ class Index extends React.Component {
         method,
         headers: headers.join("\n"),
         body,
+        curlText: "",
         resBody: "",
         resHeaders: "",
         resStatus: 0

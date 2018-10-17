@@ -53,6 +53,9 @@ app.post("/api/proxy", rawBodyMid, (req, res) => {
     res.status(400).json({ err: "Wrong request body" });
     return;
   }
+  if (!data.body) {
+    delete data.body;
+  }
   request({ ...data, timeout: 15000 }, function(err, resp, body) {
     if (err) {
       res.status(500).json({ err: err.message });
