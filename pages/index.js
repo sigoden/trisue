@@ -172,8 +172,6 @@ class Index extends React.Component {
       r[k.trim()] = (v || "").trim();
       return r;
     }, {});
-    console.log(headers);
-    console.log(headersObj);
 
     this.setState({ fetching: true });
     fetch(baseUrl + "/api/proxy", {
@@ -186,7 +184,10 @@ class Index extends React.Component {
       })
     })
       .then(res => {
-        res.json().then(data => {
+        return res.json().then(data => {
+          if (data.err) {
+            return Promise.reject(new Error(data.err));
+          }
           const resStatus = data.status;
           const resBody = data.body;
           const resHeaders = Object.keys(data.headers || {}).reduce((r, c) => {
