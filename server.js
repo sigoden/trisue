@@ -6,6 +6,7 @@ const handle = nextApp.getRequestHandler();
 const db = require("./db");
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 
 nextApp.prepare().then(() => {
   app.get("/", (req, res) => {
@@ -20,7 +21,7 @@ nextApp.prepare().then(() => {
   app.get("*", (req, res) => {
     handle(req, res);
   });
-  app.listen(PORT, err => {
+  app.listen(PORT, HOST, err => {
     if (err) throw err;
   });
 });
