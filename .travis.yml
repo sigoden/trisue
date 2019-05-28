@@ -7,6 +7,6 @@ services:
 - docker
 # if: branch == master
 script:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+- docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t $DOCKER_USERNAME/trisue .
 - docker push $DOCKER_USERNAME/trisue
