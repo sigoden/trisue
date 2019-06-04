@@ -25,6 +25,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import CopyToClipboard from "./components/CopyToClipboard";
 import parseCurl from "../lib/parseCurl";
 import xmlBeautify from "xml-beautifier";
 
@@ -101,6 +102,7 @@ class Index extends React.Component {
     },
     shareId: "",
     curlText: "",
+    shareUrl: "",
     showShareDialog: false,
     showImportDialog: false,
     collapse: {
@@ -151,7 +153,9 @@ class Index extends React.Component {
   };
 
   handleShareDialogClose = () => {
-    this.setState({ showShareDialog: false });
+    this.setState({
+      showShareDialog: false,
+    });
   };
 
   handleSendButtonClick = () => {
@@ -219,8 +223,12 @@ class Index extends React.Component {
     const baseUrl = this.getBaseUrl();
     const { form, collapse } = this.state;
 
+    const shareUrlBase = this.getBaseUrl() + "/?shareId=";
     if (this.state.shareId) {
-      this.setState({ showShareDialog: true });
+      this.setState({
+        showShareDialog: true,
+        shareUrl: shareUrlBase + this.state.shareId,
+      });
       return;
     }
 
@@ -237,6 +245,7 @@ class Index extends React.Component {
             fetching: false,
             errorMsg: "",
             showShareDialog: true,
+            shareUrl: shareUrlBase + id,
             shareId: id
           });
         });
@@ -434,11 +443,20 @@ class Index extends React.Component {
         <DialogTitle>{"分享"}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {this.getBaseUrl() + "/?shareId=" + this.state.shareId}
+            {this.state.shareUrl}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleShareDialogClose} color="primary">
+          <CopyToClipboard>
+            {({ copy }) => (
+              <Button
+                onClick={() => copy(this.state.shareUrl)}
+              >
+                复制
+              </Button>
+            )}
+          </CopyToClipboard>
+          <Button onClick={this.handleShareDialogClose}>
             关闭
           </Button>
         </DialogActions>
