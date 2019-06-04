@@ -24,16 +24,16 @@
     "@material-ui/core": "^3.2.2",
     "@material-ui/icons": "^3.0.1",
     "content-type": "^1.0.4",
-    "express": "^4.16.4",
-    "next": "^7.0.2",
-    "raw-body": "^2.3.3",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
+    "express": "^4.17.1",
+    "next": "^8.1.0",
+    "raw-body": "^2.4.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-jss": "^8.6.1",
     "request": "^2.88.0",
-    "shortid": "^2.2.13",
-    "sqlite3": "^4.0.2",
-    "xml-beautifier": "^0.4.0"
+    "shortid": "^2.2.14",
+    "sqlite3": "^4.0.8",
+    "xml-beautifier": "^0.4.1"
   },
   "devDependencies": {}
 }
