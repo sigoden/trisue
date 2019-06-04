@@ -5,7 +5,7 @@ env:
   - secure: sj8yjgGyQaGk6pY7F7PGf+rxPMJNxnAeabLXmrU3nEMpK/aBzPjIClPVMrp+y6gmELMbFZ6VT3wxThQBSisKlgHLvgGzETCBoGe070fV6xNt5BBPhJ9fk7tD7ybMNjqIgvR2/eQjIFbaC2UBxQ4Yfx6ca531oEf73YsKZucCpI5M874A1I6s7lA3xZDAtQXjHikieJ8tmVFSqG7ACaPkksTLXA2znCXliJs4f0lF4oKb0KWBEaZpmQNLHHs+ZM7bMJILFVG5OAgkbvGjmAzjgCIYiIEh6BeVLN9hruT5dFkD0SKy/j0m7b3ilZrt++sGgZwJl0PDoca74Grs03sCkPps9Kz4pgaZcXiGP4Rbgd5MTsQyYxmHAKm/vilUTeOaEJo/kJwwMkZlm89+VoMVAIrknYw6OLOJtojNC8nWJ13d3FjuWDYYq5UUJ+eF5b6lPzTl/2ahLLrGqSmD37bWulZtazAlpRsEXevKv26Z9+Si/0q/tbSdJOW1HN7got5KqsNp7a/ghRfT1c1rhafHzR7xCEmM35QCsNf2ZQuKIPlQFQKNJIGveMTlYJmm/bWDyUp1TuYhTcSqKCU2KDyCPLPWtAPKdEa9XwKoMK7LCVxnkmbGFsh0uhdvKqPgVrlFHVL3kcZjcepO+s5j7veXQZUtpt7hdzQSqzlgi2fLOZU=
 services:
 - docker
-if: branch == master
+if: branch == master && env(TRAVIS_PULL_REQUEST) == false
 script:
 - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 - docker build -t $DOCKER_USERNAME/trisue .
