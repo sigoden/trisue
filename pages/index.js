@@ -27,6 +27,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import CopyToClipboard from "./components/CopyToClipboard";
 import parseCurl from "../lib/parseCurl";
+import buildCurl from "../lib/buildCurl";
 import xmlBeautify from "xml-beautifier";
 
 const styles = {
@@ -102,8 +103,10 @@ class Index extends React.Component {
     },
     shareId: "",
     curlText: "",
+    exportCurlText: "",
     shareUrl: "",
     showShareDialog: false,
+    showExportCurlDialog: false,
     showImportDialog: false,
     collapse: {
       reqHeaders: false,
@@ -152,11 +155,30 @@ class Index extends React.Component {
     });
   };
 
-  handleShareDialogClose = () => {
+  handleDialogClose = key => {
     this.setState({
-      showShareDialog: false,
+      [key]: false,
     });
   };
+
+  handleExportCurlButtonClick = () => {
+    const { uri, method, headers, body } = this.state.form;
+    const exportCurlText = buildCurl({ uri, method, headers: this.parseHeaders(headers), body });
+    this.setState({
+      exportCurlText,
+      showExportCurlDialog: true,
+    });
+  }
+
+  parseHeaders = headers => {
+    return headers.split("\n").reduce((r, c) => {
+      const sepIndex = c.indexOf(":");
+      const k = c.slice(0, sepIndex);
+      const v = c.slice(sepIndex + 1);
+      r[k.trim()] = (v || "").trim();
+      return r;
+    }, {});
+  }
 
   handleSendButtonClick = () => {
     const { uri, method, headers, body } = this.state.form;
@@ -169,13 +191,6 @@ class Index extends React.Component {
       return;
     }
 
-    const headersObj = headers.split("\n").reduce((r, c) => {
-      const sepIndex = c.indexOf(":");
-      const k = c.slice(0, sepIndex);
-      const v = c.slice(sepIndex + 1);
-      r[k.trim()] = (v || "").trim();
-      return r;
-    }, {});
 
     this.setState({ fetching: true });
     fetch(baseUrl + "/api/proxy", {
@@ -183,7 +198,7 @@ class Index extends React.Component {
       body: JSON.stringify({
         uri,
         method,
-        headers: headersObj,
+        headers: this.parseHeaders(headers),
         body
       })
     })
@@ -416,17 +431,25 @@ class Index extends React.Component {
               className={classes.mainFormButton}
               onClick={this.handleSendButtonClick}
             >
-              Request
+              发起请求
             </Button>
             <Button
               variant="contained"
               className={classes.mainFormButton}
               onClick={this.handleShareButtonClick}
             >
-              Share
+              分享
+            </Button>
+            <Button
+              variant="contained"
+              className={classes.mainFormButton}
+              onClick={this.handleExportCurlButtonClick}
+            >
+              导出CURL
             </Button>
           </div>
           {this.renderShareDialog()}
+          {this.renderExportCurlDialog()}
           {this.renderImportDialog()}
         </div>
       </div>
@@ -438,7 +461,7 @@ class Index extends React.Component {
     return (
       <Dialog
         open={this.state.showShareDialog}
-        onClose={this.handleShareDialogClose}
+        onClose={() => this.handleDialogClose(showShareDialog)}
       >
         <DialogTitle>{"分享"}</DialogTitle>
         <DialogContent>
@@ -456,7 +479,38 @@ class Index extends React.Component {
               </Button>
             )}
           </CopyToClipboard>
-          <Button onClick={this.handleShareDialogClose}>
+          <Button onClick={() => this.handleDialogClose("showShareDialog")}>
+            关闭
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
+  }
+
+  renderExportCurlDialog() {
+    if (!process.browser) return;
+    return (
+      <Dialog
+        open={this.state.showExportCurlDialog}
+        onClose={() => this.handleDialogClose("showExportCurlDialog")}
+      >
+        <DialogTitle>{"导出CURL"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {this.state.exportCurlText}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <CopyToClipboard>
+            {({ copy }) => (
+              <Button
+                onClick={() => copy(this.state.exportCurlText)}
+              >
+                复制
+              </Button>
+            )}
+          </CopyToClipboard>
+          <Button onClick={() => this.handleDialogClose("showExportCurlDialog")}>
             关闭
           </Button>
         </DialogActions>
