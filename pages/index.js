@@ -171,7 +171,7 @@ class Index extends React.Component {
   }
 
   parseHeaders = headers => {
-    return headers.split("\n").reduce((r, c) => {
+    return headers.split("\n").filter(l => l !== "").reduce((r, c) => {
       const sepIndex = c.indexOf(":");
       const k = c.slice(0, sepIndex);
       const v = c.slice(sepIndex + 1);
