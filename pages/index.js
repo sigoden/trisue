@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import NoteIcon from "@material-ui/icons/Note";
+import HistoryIcon from "@material-ui/icons/History";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import FormatIndentIncreaseIcon from "@material-ui/icons/FormatIndentIncrease";
@@ -25,10 +26,12 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import Router from 'next/router'
 import CopyToClipboard from "./components/CopyToClipboard";
 import parseCurl from "../lib/parseCurl";
 import buildCurl from "../lib/buildCurl";
 import xmlBeautify from "xml-beautifier";
+import Storage from "../lib/Storage";
 
 const styles = {
   root: {
@@ -92,7 +95,7 @@ class Index extends React.Component {
     errorMsg: "",
     form: {
       method: "POST",
-      uri: "https://postman-echo.com/post",
+      uri: "https://httpbin.org/anything",
       headers: "Content-Type: application/json",
       body: `{"key": "value"}`,
       resHeaders: "",
@@ -119,6 +122,28 @@ class Index extends React.Component {
 
   static getInitialProps(ctx) {
     return { shareData: ctx.query.shareData };
+  }
+  componentWillMount() {
+    const storage = new Storage()
+    this.setState({ storage });
+    if (typeof (location) !== "undefined" && !this.props.shareData) {
+      const { localId } = parseQuery(location.search);
+      if (localId) {
+        const data = storage.get(localId);
+        console.log(data);
+        this.setState({
+          form: {
+            ...this.state.form,
+            ...data,
+            curlText: "",
+            resBody: "",
+            resHeaders: "",
+            resStatus: 0
+          },
+          showImportDialog: false
+        });
+      }
+    }
   }
 
   componentDidMount() {
@@ -193,14 +218,15 @@ class Index extends React.Component {
 
 
     this.setState({ fetching: true });
+    const reqObj = {
+      uri,
+      method,
+      headers,
+      body
+    };
     fetch(baseUrl + "/api/proxy", {
       method: "POST",
-      body: JSON.stringify({
-        uri,
-        method,
-        headers: this.parseHeaders(headers),
-        body
-      })
+      body: JSON.stringify({ ...reqObj, headers: this.parseHeaders(headers) })
     })
       .then(res => {
         return res.json().then(data => {
@@ -229,6 +255,7 @@ class Index extends React.Component {
               resBody: !resBody
             }
           });
+          this.state.storage.add(reqObj);
         });
       })
       .catch(this.handleFetchError);
@@ -356,6 +383,13 @@ class Index extends React.Component {
             Trisue
           </Typography>
           <div className={classes.headerBarBtns}>
+            <IconButton
+              className={classes.iconButton}
+              title="历史记录"
+              onClick={() => Router.push({ pathname: '/history' })}
+            >
+              <HistoryIcon />
+            </IconButton>
             <IconButton
               className={classes.iconButton}
               title="导入 CURL"
@@ -639,4 +673,14 @@ function getContentType(headersText) {
     default:
       return false;
   }
+}
+
+function parseQuery(queryString) {
+  const query = {};
+  const pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+  for (let i = 0; i < pairs.length; i++) {
+    const pair = pairs[i].split('=');
+    query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+  }
+  return query;
 }

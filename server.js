@@ -18,6 +18,9 @@ nextApp.prepare().then(() => {
       nextApp.render(req, res, "/", {});
     }
   });
+  app.get("/history", (req, res) => {
+    nextApp.render(req, res, "/history", {});
+  });
   app.get("*", (req, res) => {
     handle(req, res);
   });
