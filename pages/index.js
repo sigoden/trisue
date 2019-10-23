@@ -126,24 +126,6 @@ class Index extends React.Component {
   componentWillMount() {
     const storage = new Storage()
     this.setState({ storage });
-    if (typeof (location) !== "undefined" && !this.props.shareData) {
-      const { localId } = parseQuery(location.search);
-      if (localId) {
-        const data = storage.get(localId);
-        console.log(data);
-        this.setState({
-          form: {
-            ...this.state.form,
-            ...data,
-            curlText: "",
-            resBody: "",
-            resHeaders: "",
-            resStatus: 0
-          },
-          showImportDialog: false
-        });
-      }
-    }
   }
 
   componentDidMount() {
@@ -158,6 +140,11 @@ class Index extends React.Component {
           note: !form.note
         }
       });
+      if (typeof (location) !== "undefined") {
+        const { shareId: id } = parseQuery(location.search);
+        const { uri, method } = shareData;
+        this.state.storage.add(id, { uri, method });
+      }
     }
   }
 
@@ -255,7 +242,6 @@ class Index extends React.Component {
               resBody: !resBody
             }
           });
-          this.state.storage.add(reqObj);
         });
       })
       .catch(this.handleFetchError);
@@ -283,6 +269,7 @@ class Index extends React.Component {
       .then(res => {
         this.setState({ fetching: true });
         res.json().then(({ id }) => {
+          const { method, uri } = this.state.form;
           this.setState({
             fetching: false,
             errorMsg: "",
@@ -290,6 +277,7 @@ class Index extends React.Component {
             shareUrl: shareUrlBase + id,
             shareId: id
           });
+          this.state.storage.add(id, { method, uri });
         });
       })
       .catch(this.handleFetchError);

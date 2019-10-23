@@ -37,6 +37,13 @@ const styles = {
     alignItems: "center",
     justifyContent: "space-between",
   },
+  itemTexts: {
+    display: "flex",
+    alignItems: "center",
+    flexGrow: 2,
+    justifyContent: "space-between",
+    marginRight: '10px'
+  },
   itemText: {
     fontSize: '18px',
   },
@@ -95,12 +102,15 @@ class History extends React.Component {
         <div className={classes.mainContent}>
           {this.state.list.map(v => (
             <div key={v.id} className={classes.itemBox}>
-              <div className={classes.itemText}>{v.title}</div>
+              <div className={classes.itemTexts}>
+                <div className={classes.itemText}>{v.method.toUpperCase()} {v.uri}</div>
+                <div className={classes.itemText}>{v.at}</div>
+              </div>
               <div>
                 <IconButton
                   className={classes.iconButton}
                   title="打开"
-                  onClick={() => Router.push({ pathname: '/', query: { localId: v.id } })}
+                  onClick={() => Router.push({ pathname: '/', query: { shareId: v.id } })}
                 >
                   <OpenInNewIcon />
                 </IconButton>
@@ -114,30 +124,6 @@ class History extends React.Component {
               </div>
             </div>
           ))}
-
-          {/* <div className={classes.mainFormButtonBars}>
-            <Button
-              variant="contained"
-              className={classes.mainFormButton}
-              onClick={this.handleSendButtonClick}
-            >
-              发起请求
-            </Button>
-            <Button
-              variant="contained"
-              className={classes.mainFormButton}
-              onClick={this.handleShareButtonClick}
-            >
-              分享
-            </Button>
-            <Button
-              variant="contained"
-              className={classes.mainFormButton}
-              onClick={this.handleExportCurlButtonClick}
-            >
-              导出CURL
-            </Button>
-          </div> */}
         </div>
       </div>
     );
