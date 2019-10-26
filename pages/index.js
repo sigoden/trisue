@@ -142,7 +142,7 @@ class Index extends React.Component {
       });
       if (typeof (location) !== "undefined") {
         const { shareId: id } = parseQuery(location.search);
-        const { uri, method } = shareData;
+        const { uri, method } = form;
         this.state.storage.add(id, { uri, method });
       }
     }
