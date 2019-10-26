@@ -110,7 +110,7 @@ class History extends React.Component {
                 <IconButton
                   className={classes.iconButton}
                   title="打开"
-                  onClick={() => Router.push({ pathname: '/', query: { shareId: v.id } })}
+                  onClick={() => window.open(`/?shareId=${v.id}`)}
                 >
                   <OpenInNewIcon />
                 </IconButton>

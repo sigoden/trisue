@@ -483,7 +483,7 @@ class Index extends React.Component {
     return (
       <Dialog
         open={this.state.showShareDialog}
-        onClose={() => this.handleDialogClose(showShareDialog)}
+        onClose={() => this.handleDialogClose(this.state.showShareDialog)}
       >
         <DialogTitle>{"分享"}</DialogTitle>
         <DialogContent>
