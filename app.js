@@ -56,7 +56,8 @@ app.post("/api/proxy", rawBodyMid, (req, res) => {
   if (!data.body) {
     delete data.body;
   }
-  if (/gzip/.test(data.headers["accept-encoding"])) {
+  const acceptEncoding = data.headers["accept-encoding"] || data.headers["Accept-Encoding"];
+  if (/gzip/.test(acceptEncoding)) {
     data.gzip = true;
   }
   request({ ...data, timeout: 15000 }, function(err, resp, body) {
