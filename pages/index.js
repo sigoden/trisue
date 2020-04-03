@@ -104,6 +104,7 @@ class Index extends React.Component {
       resStatus: 0,
       note: ""
     },
+    fetched: false,
     shareId: "",
     curlText: "",
     exportCurlText: "",
@@ -230,6 +231,7 @@ class Index extends React.Component {
           this.setState({
             fetching: false,
             errorMsg: "",
+            fetched: true,
             shareId: "",
             form: {
               ...this.state.form,
@@ -322,7 +324,7 @@ class Index extends React.Component {
 
   handleResBodyFormatButtonClick = type => {
     if (!type) return;
-    if (this.state.form.resBodyOrigin) {
+    if (!this.state.fetched && this.state.form.resBodyOrigin) {
       this.setState({
         form: {
           ...this.state.form,
